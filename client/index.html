@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>Twilio Client</title>
+<script type="text/javascript"
+src="//media.twiliocdn.com/sdk/js/client/v1.3/twilio.min.js"></script>
+    <script type="text/javascript"
+      src="/js/jquery.min.js">
+    </script>
+    <link href="/css/client.css"
+      type="text/css" rel="stylesheet" />
+    <script type="text/javascript">
+
+  Twilio.Device.setup('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZSI6InNjb3BlOmNsaWVudDppbmNvbWluZz9jbGllbnROYW1lPXRvbW15IiwiaXNzIjoiQUNiOWRkZjFkYmJmYTQxZTE4OTVhOWNhYTU3NzJjNjBlYiIsImV4cCI6MTQ3ODg2OTc3OH0.4h1nhkcbRu0gZC5B4k-2vas2iRYgFZExaOURINT6SR0', {'debug':true});
+    //  Twilio.Device.setup('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZSI6InNjb3BlOmNsaWVudDpvdXRnb2luZz9hcHBTaWQ9QVA2MDk3NzFlMzJhNDFlN2M3NGU5ZDVkYmY4ZWU5ZmNmNCZhcHBQYXJhbXM9JmNsaWVudE5hbWU9dG9tbXkgc2NvcGU6Y2xpZW50OmluY29taW5nP2NsaWVudE5hbWU9dG9tbXkiLCJpc3MiOiJBQzFhYmM3MDUwN2RmYjk5YzY5NjFhNjdkNjFiMzk5ZGVlIiwiZXhwIjoxNDc4Nzc2MjU5fQ.UX3fp6JSUSfX8Dj3BxC5RWlUNJg9R9W70VNZ3Jfugnk', {'debug':true});
+
+      Twilio.Device.ready(function (device) {
+        $("#log").text("Ready");
+      });
+
+      Twilio.Device.error(function (error) {
+        $("#log").text("Error: " + error.message);
+      });
+
+      Twilio.Device.connect(function (conn) {
+        $("#log").text("Successfully established call");
+      });
+
+      function call() {
+          // using jquery to get the value of the element with id 'number' 
+          params = {"tocall": $("#number").val()}; 
+          Twilio.Device.connect(params);      }
+          
+
+       Twilio.Device.incoming(function (connection) {
+             if (confirm('Accept incoming call from ' + connection.parameters.From + '?')){
+                 connection.accept();
+             } else {
+                 connection.reject();
+         }
+  
+});
+
+         
+          
+    </script>
+  </head>
+  <body>
+    <button class="call" onclick="call();">
+      Call
+    </button>
+    <button class="hangup" onclick="Twilio.Device.disconnectAll();">
+      Hangup
+    </button>
+
+    
+    <input type="text" id="number" name="number" placeholder="Enter a phone number to call"/>
+   
+    <div id="log">Your log is here : Loading...</div>
+  </body>
+</html>
