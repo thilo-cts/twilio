@@ -8,7 +8,8 @@ var http = require('http');
 var fs = require('fs');
 var path = require('path');
 var express = require('express');
-
+var bodyParser = require('body-parser');
+var cors = require('cors');
 //
 // ## SimpleServer `SimpleServer(obj)`
 //
@@ -24,13 +25,19 @@ var options = {
 };
 var server = https.createServer(options, router);
 var http_server = http.createServer(router);
+router.use(cors());
+router.use(bodyParser.json()); // support json encoded bodies
+router.use(bodyParser.urlencoded({ extended: true })); 
+
 router.use(express.static(path.resolve(__dirname, 'client')));
 
+require('./server/router/router')(router); 
 
 
+  
 
 
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
-  var addr = server.address();
+http_server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+  var addr = http_server.address();
   console.log("Chat server listening at", addr.address + ":" + addr.port);
 });
