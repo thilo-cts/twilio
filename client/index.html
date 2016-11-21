@@ -5,31 +5,172 @@
   <script type="text/javascript" src="https://media.twiliocdn.com/sdk/js/client/v1.3/twilio.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js "></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js "></script>
-  <script type="text/javascript" src="http://twilio-client-thilojith.c9users.io/js/twilio-client.js"></script>
+  <script type="text/javascript" src="/js/twilio-client.js"></script>
+<script type="text/javascript" src="/js/lib/v3.3.7bootstrap.min.js"></script>
 
-
-  <link href="http://twilio-client-thilojith.c9users.io/css/client.css" type="text/css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+  <link href="/css/client.css" type="text/css" rel="stylesheet" />
+  <link href="/js/lib/css/v4.0.0alphabootstrap.min.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>
   <div class="container">
     <div class="agent-container" ng-app="agent">
       <div ng-controller="agentLoginController">
-        <span >{{welcomeMsg}}</span>
-        <div class="twilio-client" >
-          <div class="input-group" ng-show="notLogin">
-            <input type="text" class="form-control" placeholder="Agent Name.." id="workerName" ng-model="workerName">
-            <span class="input-group-btn">
-              <button class="btn btn-default" ng-click="initiateTwilio()" type="button">Go!</button>
-           </span>
-          </div>
-          <div>{{errorMessage}} </div>
-          <div ng-show="!notLogin">
-            {{log}}
-            <span id="log"></span>
+        <div ng-show="!loggedIn">
+          <span >{{welcomeMsg}}</span>
+          <div class="twilio-client" >
+            <div class="input-group" ng-show="notLogin">
+              <input type="text" class="form-control" placeholder="Agent Name.." id="workerName" ng-model="workerName">
+              <span class="input-group-btn">
+                <button class="btn btn-default" ng-click="initiateTwilio()" type="button">Go!</button>
+             </span>
+            </div>
+            <div>{{errorMessage}} </div>
+            <div ng-show="!notLogin">
+              {{log}}
+              <span id="log"></span>
+            </div>
           </div>
         </div>
+  
+  
+  {{loggedIn}}
+  <div ng-show="loggedIn">
+  <div id="accordion" role="tablist" aria-multiselectable="true"> <!--accordion div start-->
+    <div class="col-sm-6 p-0"><!--start of first col-sm-6-->
+    <div class="card"><!--start of card-->
+      <div class="card-header" role="tab" id="headingOne"><!--heading one start-->       
+       <h5 class="mb-0">
+          <a data-toggle="collapse" data-parent="#accordion"  href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <center>Work State</center>
+          </a>
+        </h5>
+      </div><!--end of heading one-->
+      <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div class="card-block">
+           <div class="p-0 col-xs-12 states">
+             <div class="col-xs-6">
+             <div class="col-xs-6">
+              <button type="button" class="btn btn-outline-primary ">Avail</button>
+              </div>
+
+              <div class="col-xs-6">
+              <button type="button" class="btn btn-outline-primary">AUX</button>
+              </div>
+              </div>
+          <div class="btn-group col-xs-6">
+              <!--<button type="button" class="btn-sm btn-info">AUX - status</button>-->
+              <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="p-0 caret">AUX-status</span>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Avail</a>
+                <a class="dropdown-item" href="#">Aux</a>
+                <a class="dropdown-item" href="#">Busy</a>
+                <div class="dropdown-divider">ACW</div>
+                <a class="dropdown-item" href="#">Separated link</a>
+              </div>
+          </div>
+          </div>
+            <div class="col-xs-6 ">
+              <div class="col-xs-6">
+              <button type="button" class="btn btn-outline-warning">Busy</button>
+              </div>
+              <div class="col-xs-6">
+              <button type="button" class="btn btn-outline-primary">ACW</button>
+              </div>
+            </div>
+          
+  
+          </div>
+        </div>
+      
+    </div><!--end of card-->
+  </div><!--end of col-sm-6-->
+    <div class="col-sm-6 p-0"><!--start of second col-sm-5-->
+    <div class="card">
+      <div class="card-header" role="tab" id="headingTwo">
+        <h5 class="mb-0">
+          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <center>Inbound Work Control</center>
+          </a>
+        </h5>
+      </div>
+
+      <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="card-block">
+          <div class="container">
+            <!--<div class="p-0 col-sm-12">-->
+            <div class="tabbable">
+             <ul class="nav nav-tabs">
+              <li class="nav-item"><a class="nav-link active" href="#call" data-toggle="tab">Call</a></li>
+              <li class="nav-item"><a class="nav-link" href="#email" data-toggle="tab">Email/SMS</a></li>
+              <li class="nav-item"><a class="nav-link" href="#webchat" data-toggle="tab">Webchat</a></li>
+              <li class="nav-item"><a class="nav-link" href="#video" data-toggle="tab">Video</a></li>
+            </ul>
+        
+           <div class="tab-content">
+            <div id="call" class="tab-pane fade in active">
+               
+                <div class="p-0 col-xs-12 primary">
+                  <div class="col-xs-6">
+          
+                  <div class="p-0 col-xs-12">
+                    <h6>Inbound Call</h6>
+                    <h6>0207 733 7700</h6>
+                  </div>
+            
+                  
+                  <div class="p-0 col-xs-12 set">
+                  <div class="col-xs-6">
+                    <i class="fa fa-phone fa-1x col-xs-3 icon-answer" aria-hidden="true"></i>
+                    <p class="col-xs-3">Answer</p>
+                    </div>
+                    <div class="col-xs-6">
+                    <i class="fa fa-phone-square fa-1x col-xs-3 icon-reject " aria-hidden="true"></i>
+
+                    
+                    <p class="col-xs-3">Reject</p>
+                    </div>
+              </div>
+               </div>
+        
+             <div ng-repeat="customer in customerDetails ">
+              <div class="col-xs-6">
+                <div class="p-0 col-sm-12">
+                  <i class="fa fa-user-o fa-1x col-xs-4" aria-hidden="true"></i>
+                  <div class="p-0 col-xs-8 ">
+                    <h6>{{customer.fullname}}</h6>
+                    <h6><a ng-href="{{customer.url}}">{{customer.accountnumber}}</a></h6>
+                  </div>
+                </div>
+                <hr/>
+                </div>
+                
+            
+            </div>
+  </div><!--call ended-->
+ <div id="email" class="tab-pane fade">
+    <h3>Email/SMS</h3>
+    <p>Email/SMS content</p>
+  </div>
+  <div id="webchat" class="tab-pane fade">
+    <h3>Web Chat</h3>
+    <p>Web-chat</p>
+  </div>
+  <div id="video" class="tab-pane fade">
+    <h3>Video</h3>
+    <p>Video</p>
+  </div>
+  </div><!--end of tab content-->
+        </div><!--end of tabbable-->
+    </div>
+    </div>
+    </div>
+    </div>
+  </div><!--end of second col-sm-5-->
+  </div><!--accordion div ends-->
+  </div>
       </div>
     </div>
   </div>
