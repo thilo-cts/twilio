@@ -51,14 +51,18 @@
          });
      var callConnection = '';
      Twilio.Device.incoming(function(connection) {
+      console.log("incoming..............");
       $scope.inCall = true;
       callConnection = connection;
+      $scope.$apply();
      });
      $scope.accept =  function(){
+      console.log("accept..............");
       callConnection.accept();
      }
      
       $scope.reject =  function(){
+       console.log("reject..............");
       callConnection.reject();
      }
      
