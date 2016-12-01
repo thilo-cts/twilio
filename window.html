@@ -1,0 +1,371 @@
+<html>
+
+<head>
+  <title>Twilio Client</title>
+  <script type="text/javascript" src="/js/lib/twilio.js"></script>
+  <script type="text/javascript" src="/js/lib/jquery.min.js "></script>
+  <script type="text/javascript" src="/js/lib/angular.min.js "></script>
+  <script type="text/javascript" src="/js/lib/v3.3.7bootstrap.min.js"></script>
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script type="text/javascript" src="/js/lib/angular-route.js"></script>
+  <script type="text/javascript" src="/js/lib/angular-animate.min.js"></script>
+  <script type="text/javascript" src="/js/lib/angular-aria.min.js"></script>
+  <script type="text/javascript" src="/js/lib/angular-messages.min.js"></script>
+  <!-- Angular Material Library -->
+  <script type="text/javascript" src="/js/lib/angular-material.min.js"></script>
+  <script type="text/javascript" src="/js/twilio-client.js"></script>
+  <link href="/css/client.css" type="text/css" rel="stylesheet" />
+  <link href="/css/angular-material.min.css" type="text/css" rel="stylesheet" />
+  <link href="/css/v4.0.0alphabootstrap.min.css" type="text/css" rel="stylesheet" />
+  <link href="/css/material-icon.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body class="bodycolor">
+  <div class="container">
+    <div class="agent-container" ng-app="agent">
+      <div ng-controller="agentLoginController">
+        <div>
+          <div class="agent-console">
+            <div class="agent-room">
+              <div class="panel-group agent-work" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default" ng-show="!loggedIn">
+                  <div class="panel-heading" role="tab" id="headingThree">
+                    <h4 class="panel-title">
+                      <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                        Agent Login 
+                      </a>
+                    </h4>
+                  </div>
+
+                  <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                    <div class="panel-body">
+                      <div class="twilio-client">
+                        <div class="input-group" ng-show="!loggedIn">
+
+
+
+                          <md-content class="md-padding" layout-xs="column" layout="row">
+                            <div flex-xs flex-gt-xs="50" layout="column">
+                              <md-card>
+                                <md-input-container class="md-icon-float md-block">
+                                  <!-- Use floating label instead of placeholder -->
+                                  <label>Name</label>
+                                  <md-icon class="name"><i class="material-icons" style="color:blue">person</i></md-icon>
+                                  <input id="workerName" ng-model="workerName" type="text">
+                                </md-input-container>
+                                <md-input-container md-no-float class="md-block">
+                                  <md-icon class="name"><i class="material-icons" style="color:blue">lock</i></md-icon>
+                                  <input ng-model="user.password" type="password" placeholder="Password">
+                                </md-input-container>
+                                <md-button class="md-raised md-primary" ng-click="initiateTwilio()">Login</md-button>
+
+                                <div>{{errorMessage}} </div>
+                              </md-card>
+                            </div>
+                          </md-content>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default" style="margin-top: 10px;" ng-show="loggedIn">
+                  <div class="panel-heading" role="tab" id="headingTwo">
+                    <!--<md-select class="states" ng-model="agentaux.status">
+                        <md-option value="Busy">Busy</md-option>
+                        <md-option value="Break">Break</md-option>
+                        <md-option value="Ready">Ready</md-option>
+                      </md-select>-->
+
+                    <h4 class="panel-title">
+                      <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                   Inbound Work control
+                     </a>
+                    </h4>
+                  </div>
+                  <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                    <div ng-cloak>
+                      <md-content class="md-padding">
+                        <md-tabs md-dynamic-height md-border-bottom>
+                          <md-tab id="tab1">
+                            <md-tab-label>
+                              <a><i class="material-icons md-36">phone_in_talk</i></img>
+                              <!--<img src="./img/call3.png" title="Call">-->
+                              </a>
+                            </md-tab-label>
+                            <md-tab-body>
+                              <div ng-show="!inCall">
+                                <section layout-gt="column" layout-align="center center" layout-wrap class="waiting">
+                                  <div>
+
+                                    <md-button class="md-fab md-hue-2 wait" aria-label="Reject">
+                                      <i class="material-icons md-48 blink" style="color:white">settings_phone</i>
+                                    </md-button>
+
+                                    Waiting for a call
+                                  </div>
+                                </section>
+                              </div>
+                              <div ng-show="inCall">
+                                <div>
+                                  <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                                    <md-button ng-disabled="true" class="md-primary">Call from {{incomingPhoneNumber}}</md-button>
+                                  </section>
+                                  <div class="options" ng-show="!isCallAccepted">
+                                    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                                      <md-button class="md-fab md-hue-2 ans" aria-label="Answer">
+                                        <i class="material-icons md-36" ng-click="accept()" style="color:white">call</i>
+                                      </md-button>
+                                      <md-button class="md-fab md-hue-2 rej" aria-label="Reject">
+                                        <i class="material-icons md-36" ng-click="reject()" style="color:white">call</i>
+                                      </md-button>
+                                    </section>
+                                  </div>
+                                  <div class="options" ng-show="isCallAccepted">
+                                    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                                      <md-button class="md-fab md-hue-2 trans" aria-label="Transfer">
+                                        <i class="material-icons md-36 " title="transfer" ng-click="transfer()" style="color:white">phone_forwarded</i>
+                                      </md-button>
+                                      <md-button class="md-fab md-hue-2 hold" aria-label="Hold">
+                                        <i class="material-icons md-36" title="hold" ng-click="hold()" style="color:white">phone_paused</i>
+                                      </md-button>
+                                      <md-button class="md-fab md-hue-2 hung" aria-label="Hangup">
+                                        <i class="material-icons md-36" title="Hangup" ng-click="stopTimer()" style="color:white">call_end</i>
+                                      </md-button>
+                                    </section>
+                                  </div>
+                                  <div class="timeclock" ng-show="isCallAccepted">
+                                    <center>
+                                      {{hours}} : {{minutes}} : {{seconds}}
+                                    </center>
+
+                                  </div>
+                                </div>
+
+                                <md-list md-dynamic-height flex>
+
+                                  <md-subheader class="md-no-sticky">Matching Contacts
+
+                                  </md-subheader>
+                                  <md-list-item class="md-3-line" ng-click="null" ng-repeat="customer in customerDetails">
+                                    <i class="material-icons md-36 md-avatar">account_circle</i>
+
+                                    <div class="md-list-item-text">
+                                      <h3> {{ customer.fullname }} </h3>
+                                      <p><a class="customer_url" ng-click="redirect(customer.url)">{{customer.accountnumber}}</a></p>
+                                      <p>{{customer.address}}</p>
+                                    </div>
+
+                                  </md-list-item>
+                                </md-list>
+                              </div>
+                            </md-tab-body>
+                          </md-tab>
+
+                          <md-tab id="tab2">
+                            <md-tab-label>
+                            <a><i class="material-icons md-36">textsms</i></a>
+                              <!--<a><img src="./img/mail.png" title="Email/SMS"></img>-->
+                              </a>
+                            </md-tab-label>
+                            <md-tab-body>
+                              <div class="md-display-2">
+                                <div ng-show="!inSms">
+                                  Waiting for SMS
+                                </div>
+                                <div ng-show="inSms">
+                                  <div>
+                                    <div class="msgbody">
+                                      <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                                        <md-button ng-disabled="true" class="md-primary">Message from {{incomingPhoneNumber}} +112345678</md-button>
+                                      </section>
+                                    </div>
+
+                                    <!--<div>
+                                     <md-card>
+                                       <md-card-content>
+                                         <h6>Message</h6>
+                                         <span><i class="material-icons"" style="color:blue">message</i></span>
+                                         <div class="md-tile-left inset" hide-sm>
+                                           <p>Messages from users</p>
+                                           </div>
+                                           </md-card-content>
+                                     </md-card>
+                                     </div>
+
+                           <md-whiteframe class="md-whiteframe-22dp" flex-sm="40"  layout layout-align="center center">
+                                <h6>Message</h6>
+                                         <div class="md-tile-left inset" hide-sm>
+                                           <p>Messages from users</p>
+                                           </div>
+                             </md-whiteframe>-->
+
+                                    <md-toolbar class="md-hue-2">
+                                      <div class="md-toolbar-tools">
+                                        <span><i class="material-icons"" style="color:white">textsms</i></span>
+                                        <h6><span>Message</span></h6>
+
+                                      </div>
+                                    </md-toolbar>
+                                    <md-content>
+                                      <div class="md-tile-left inset" hide-sm>
+                                        <p>Messages from users</p>
+                                      </div>
+                                    </md-content>
+
+
+
+                                    <div class="options" ng-show="!issmsaccepted">
+                                      <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                                        <md-button class="md-fab md-hue-2 ans" aria-label="Answer">
+                                          <i class="material-icons md-36" " ng-click="respond() " style="color:white ">check_circle</i>
+                                      </md-button>
+                                      <md-button class="md-fab md-hue-2 rej " aria-label="Reject ">
+                                        <i class="material-icons md-36 " style="color:white ">highlight_off</i>
+                                      </md-button>
+                                    </section>
+                                  </div>
+                                    
+
+                                    <div ng-show="issmsaccepted ">
+                                      <section layout="row " layout-sm="column " layout-align="center center " layout-wrap>
+                                      <md-button class="md-fab md-hue-2 ans " aria-label="Answer ">
+                                      <i class="material-icons md-36 " style="color:white ">done_all</i>
+                                      </md-button>
+                                      <span class="caption ">Completed</span>
+                                    </section>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!--inSms-->
+                              </div>
+                            </md-tab-body>
+                          </md-tab>
+
+                          <md-tab id="tab3 ">
+                            <md-tab-label>
+                             <a> <i class="material-icons md-36">chat</i></a>
+                              <!--<a><img src="./img/webchat.png " title="WebChat "></img>
+                              </a>-->
+                            </md-tab-label>
+                            <md-tab-body>
+                              <md-card>
+                              <!--<div class="md-display-2 ">
+                                <p> webchat</p>
+                              </div>-->
+
+                              <!--<div class="list-chat">
+                              <section layout="row " layout-wrap>
+                               
+                              <ul class="chat ">
+                                <li>
+                                  <i class="material-icons" style="color:blue ">chat_bubble</i>
+                                  <div class="message ">hi</div>
+                                  </li>
+                               </ul>
+                               </section>
+                               <section layout="row" layout-align="end">
+                                  <md-input-conainer class="msg">
+                                    <input>
+                                  
+                                 <md-button class="md-hue-2">  <i class="material-icons" style="color:#66D9FA  ">send</i></md-button>
+                                      
+                                  </md-input-container>
+                                    </section>
+                                  </div>-->
+                                <section layout="row">  
+                                <md-list md-dynamic-height class="msg">
+                                  <md-list-item>
+                                   <i class="material-icons md-fab" style="color:#000080">comment</i>
+                                    <div class="message">hi</div>
+                                    </md-list-item>
+                                       <md-list-item>
+                                   <i class="material-icons md-fab" style="color:#000080">comment</i>
+                                    <div class="message ">hello</div>
+                                    </md-list-item>
+                                       <md-list-item>
+                                    <i class="material-icons md-fab" style="color:#000080 ">comment</i>
+                                    <div class="message ">welcomesdfhjksdbh skldfhklhflksdhfkl jsdfhjkldfehkf</div>
+                               </md-list-item>
+                                       <md-list-item>
+                                   <i class="material-icons md-fab" style="color:#000080">comment</i>
+                                    <div class="message">hi</div>
+                                    </md-list-item>
+                                       <md-list-item>
+                                   <i class="material-icons md-fab" style="color:#000080">comment</i>
+                                    <div class="message ">hello</div>
+                                    </md-list-item>
+                                       <md-list-item>
+                                    <i class="material-icons md-fab" style="color:#000080 ">comment</i>
+                                    <div class="message ">welcomesdfhjksdbh skldfhklhflksdhfkl jsdfhjkldfehkf</div>
+                               </md-list-item>
+                                </md-list>
+                                </section>
+                               
+                                    </md-card>
+                                      
+
+
+
+
+     <div layout="row" layout-align="space-between end">
+                                  <md-input-container>
+
+                                  
+                                <div>
+                                   <textarea placeholder="Type Here" rows="5" style="width:300px"></textarea>
+                                   </div>
+                                    
+                                  </md-input-container>
+                            <md-icon>  <i class="material-icons " style="color:#66D9FA">send</i></md-icon>
+                                   
+                                   </div>
+                                   
+                                    <!--<div class="container">
+                                      <div layout="row">
+                                        <div class="input-field">
+                                           <md-input-container>
+                            
+                                      
+                                <div>
+                                   <textarea placeholder="Type Here" md-maxlength="150" rows="5" style="width:300px"></textarea>
+                                   </div>
+                                    
+                                 
+                                  </md-input-container>
+                                  </div>
+                                  <div class="input-field">
+                                      <md-button class="waves-effect waves-light btn-floating ">  <i class="material-icons " style="color:white">send</i></md-button>
+                                    </div>
+                                    </div>
+                                    </div>-->
+                            </md-tab-body>
+                          </md-tab>
+
+                          <md-tab id="tab4 ">
+                            <md-tab-label>
+                               <a> <i class="material-icons md-36">videocam</i></a>
+                              <!--<a><img src="./img/video.png " title="Video "></img>-->
+                              </a>
+                            </md-tab-label>
+                            <md-tab-body>
+                              <div class="md-display-2 ">
+                                <p> Video</p>
+                              </div>
+                            </md-tab-body>
+                          </md-tab>
+                        </md-tabs>
+                      </md-content>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
