@@ -40,7 +40,7 @@
                   <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
                     <div class="panel-body">
                       <div class="twilio-client">
-                        <div class="input-group" ng-show="!loggedIn">
+                        <div class="input-group" ng-show="notLogin">
 
 
 
@@ -60,6 +60,10 @@
                                 <md-button class="md-raised md-primary" ng-click="initiateTwilio()">Login</md-button>
 
                                 <div>{{errorMessage}} </div>
+                                <div ng-show="!notLogin">
+                                  {{log}}
+                                  <span id="log"></span>
+                                </div>
                               </md-card>
                             </div>
                           </md-content>
@@ -249,6 +253,14 @@
                               </a>-->
                             </md-tab-label>
                             <md-tab-body>
+                              <div layout="column" style="height:500px" class="msg">
+                                   <md-toolbar class="md-hue-2 head"  md-scroll-shrink>
+                                      <div class="md-toolbar-tools">
+                                        <span><i class="material-icons"" style="color:white">chat</i></span>
+                                        <h6><span>Chat with XXX</span></h6>
+
+                                      </div>
+                                    </md-toolbar>
                               <md-card>
                               <!--<div class="md-display-2 ">
                                 <p> webchat</p>
@@ -273,37 +285,71 @@
                                   </md-input-container>
                                     </section>
                                   </div>-->
-                                <section layout="row">  
-                                <md-list md-dynamic-height class="msg">
+                                  <md-content>
+                                <section layout="row">
+                                  
+                                <md-list md-dynamic-height>
                                   <md-list-item>
-                                   <i class="material-icons md-fab" style="color:#000080">comment</i>
-                                    <div class="message">hi</div>
+                                  <!--<i class="material-icons md-fab" style="color:#000080">comment</i>-->
+                                   <i class="material-icons md-fab md-36">account_circle</i>
+                                    <div class="messageo">hi</div>
                                     </md-list-item>
-                                       <md-list-item>
-                                   <i class="material-icons md-fab" style="color:#000080">comment</i>
-                                    <div class="message ">hello</div>
-                                    </md-list-item>
-                                       <md-list-item>
-                                    <i class="material-icons md-fab" style="color:#000080 ">comment</i>
-                                    <div class="message ">welcomesdfhjksdbh skldfhklhflksdhfkl jsdfhjkldfehkf</div>
-                               </md-list-item>
-                                       <md-list-item>
-                                   <i class="material-icons md-fab" style="color:#000080">comment</i>
-                                    <div class="message">hi</div>
-                                    </md-list-item>
-                                       <md-list-item>
-                                   <i class="material-icons md-fab" style="color:#000080">comment</i>
-                                    <div class="message ">hello</div>
-                                    </md-list-item>
-                                       <md-list-item>
-                                    <i class="material-icons md-fab" style="color:#000080 ">comment</i>
-                                    <div class="message ">welcomesdfhjksdbh skldfhklhflksdhfkl jsdfhjkldfehkf</div>
-                               </md-list-item>
+                                       
+                                       <md-list-item >
+                                        <div class="messagee">hello</div>
+                                        <!--<i class="material-icons md-fab  place" style="color:#000080">comment</i>-->
+                                        <i class="material-icons md-fab md-36 place">account_circle</i>
+                                      </md-list-item>
+
+                                       <md-list-item >
+                                        <!--<i class="material-icons md-fab" style="color:#000080 ">comment</i>-->
+                                        <i class="material-icons md-fab md-36">account_circle</i>
+                                        <div class="messageo">welcomesdfhjksdbh skldfhklhflksdhfkl jsdfhjkldfehkf</div>
+                                      </md-list-item>
+                                       
+                                      <md-list-item>
+                                        <div class="messagee">hi</div>
+                                        <!--<i class="material-icons md-fab place" style="color:#000080">comment</i>-->
+                                        <i class="material-icons md-fab md-36 place">account_circle</i>
+                                      </md-list-item>
+
+                                    <md-list-item>
+                                     <!--<i class="material-icons md-fab" style="color:#000080">comment</i>-->
+                                     <i class="material-icons md-fab md-36">account_circle</i>
+                                    <div class="messageo">hello</div>
+                                  </md-list-item>
+
+                                  <md-list-item>
+                                    <div class="messagee">welcomesdfhjksdbh skldfhklhflksdhfkl jsdfhjkldfehkf</div>
+                                    <!--<i class="material-icons md-fab place" style="color:#000080 ">comment</i>-->
+                                    <i class="material-icons md-fab md-36 place">account_circle</i>
+                                   </md-list-item>
+
+                                    <md-list-item>
+                                        <div class="messagee">hi</div>
+                                        <!--<i class="material-icons md-fab place" style="color:#000080">comment</i>-->
+                                        <i class="material-icons md-fab md-36 place" style="color:#a9a9a9"" >account_circle</i>
+                                      </md-list-item>
+
+                                    <md-list-item>
+                                     <!--<i class="material-icons md-fab" style="color:#000080">comment</i>-->
+                                     <i class="material-icons md-fab md-36">account_circle</i>
+                                    <div class="messageo">hello</div>
+                                  </md-list-item>
+
+                                  <md-list-item>
+                                    <div class="messagee">welcomesdfhjksdbh skldfhklhflksdhfkl jsdfhjkldfehkf</div>
+                                    <!--<i class="material-icons md-fab place" style="color:#a9a9a9 ">comment</i>-->
+                                    <i class="material-icons md-fab md-36 place" style="color:#a9a9a9">account_circle</i>
+                                   </md-list-item>
+
+
                                 </md-list>
+                          
                                 </section>
-                               
+                               </md-content>
                                     </md-card>
-                                      
+                                      </div>
 
 
 
@@ -313,7 +359,7 @@
 
                                   
                                 <div>
-                                   <textarea placeholder="Type Here" rows="5" style="width:300px"></textarea>
+                                   <textarea placeholder="Type Here" md-maxlength="150" rows="5" style="width:300px"></textarea>
                                    </div>
                                     
                                   </md-input-container>
