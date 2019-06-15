@@ -6,12 +6,16 @@
      $scope.log = '';
      $scope.loggedIn = false;
      $scope.inCall = false;
+     
+     var worker = {};
+     
      $scope.initiateTwilio = function() {
+         
          console.log("workernae", $scope.workerName);
 
          $http({
              method: 'POST',
-             url: '/getToken',
+             url: 'https://twilio-client-thilojith.c9users.io/getToken',
              data: {
                  workerName: $scope.workerName
              }
@@ -23,12 +27,13 @@
             $("#log").text("Connecting to Twilio..");
              $scope.errorMessage = '';
              setUpToken(response.token);
+             
              $scope.loggedIn = true;
             // $scope.retriveData('+19733689700');
          }, function errorCallback(response) {
              console.log(response);
              $scope.errorMessage = response.data.errormessage;
-         })
+         });
      }
 
      function setUpToken(token) {
@@ -36,8 +41,18 @@
          Twilio.Device.setup(token, {
              'debug': true
          });
+         worker = new Twilio.TaskRouter.Worker(token);
      }
-    // console.log("Twilio",Twilio);
+     
+     function _find(arr , property, propertyValue){
+         var obj = [];
+         angular.forEach(arr, function(value, key) {
+             if(value[property] === propertyValue){
+                 obj = value;
+             }
+         });
+         return obj;
+     }
          Twilio.Device.ready(function(device) {
              $("#log").text("Ready");
          });
@@ -50,21 +65,27 @@
               $("#log").text("Successfully established call");
          });
      var callConnection = '';
+     
      Twilio.Device.incoming(function(connection) {
-      console.log("incoming..............");
-      $scope.inCall = true;
-      callConnection = connection;
-      $scope.$apply();
+         console.log("..hey coming ......");
+         alert("incoming....");
+              console.log("incoming..............");
+              $scope.inCall = true;
+              callConnection = connection;
+              $scope.$apply();
+              
      });
+     
      $scope.accept =  function(){
-      console.log("accept..............");
+      
       callConnection.accept();
      }
      
       $scope.reject =  function(){
-       console.log("reject..............");
-      callConnection.reject();
+        console.log("reject..............");
+        callConnection.reject();
      }
+     
      
 var customerDetails_HC = {
   "@odata.context":"https://utilities360.crm8.dynamics.com/api/data/v8.0/$metadata#accounts(name,accountid)","value":[
@@ -77,11 +98,12 @@ var customerDetails_HC = {
     }
   ]
 };
+
  $scope.customerDetails = [];
  var serverUrl= "https://utilities360.crm8.dynamics.com";
-angular.forEach(customerDetails_HC.value, function(value, key) {
-                var accounturl = serverUrl + "/main.aspx?etc=1&extraqs=&histKey=422700437&id=%7b" 
-                            + value.accountid + "%7d&newWindow=true&pagetype=entityrecord";
+ var serverUrlPath = "/nga/engagementhub.aspx?org=org7d548c73&pagetype=interactioncentricform&etn=account&id=";
+ angular.forEach(customerDetails_HC.value, function(value, key) {
+                var accounturl = serverUrl + serverUrlPath+ value.accountid;
 
                 var cusObj = { accountid: value.accountid, 
                                accountnumber: value.name, 
@@ -91,6 +113,12 @@ angular.forEach(customerDetails_HC.value, function(value, key) {
                 $scope.customerDetails.push(cusObj);
 
             });
+            if(customerDetails_HC.value.length ===1){
+               var cusObj = customerDetails_HC.value[0];
+               var accounturl = serverUrl + "/main.aspx?etc=1&extraqs=&histKey=422700437&id=%7b" 
+                            + cusObj.accountid + "%7d&newWindow=true&pagetype=entityrecord";
+               window.location.href = accounturl;
+            }
             
 
  // parent.Xrm.Page.context.getClientUrl() 

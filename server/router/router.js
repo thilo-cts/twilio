@@ -6,14 +6,14 @@ var twilio = require("twilio"),
 
 module.exports = function(app, wsServer) {
     var reservationSid = "",
-        ACCOUNT_SID = "AC7b39bfd4c70d4ec566d865889e03488a",
-        AUTH_TOKEN = "d09d8a2f47b8af903e29fecd2337174b",
-        WORKSPACE_ID = "WSf79860f48e7c35cec990789fcb83dd4f",
-        WORKFLOW_SID = "WWc6c2d8558e55ce8a91c21db6f1e3a613",
-        SIGNINGKEY =  "SK5ea58ce34ab1738fb9b7c65a7a1dd6cf",
-        SIGNINGKEY_SECRET = "5jVN1gCsuytcovb5TWEFdijyjpgZXI99",
-        SERVICE_SID = "IS2fb4663fd5214b82ad7c77fa31d992d5",
-        CRMURL = 'https://cxm.cognizant.com/CRMService.svc';
+        ACCOUNT_SID = "ACb4a42bfae704336c8b6a4dcc0da538d8",//"AC7b39bfd4c70d4ec566d865889e03488a",
+        AUTH_TOKEN = "6b4f8c172fe6d1d7ec6525bc9667190a", //"d09d8a2f47b8af903e29fecd2337174b",
+        WORKSPACE_ID = "WSe467d7434b5eac8434f0ce702c25047c", //""WSf79860f48e7c35cec990789fcb83dd4f",
+        WORKFLOW_SID = "WW383d71082cb674adc4e1aa9aa2e0c010", //"WWc6c2d8558e55ce8a91c21db6f1e3a613",
+        SIGNINGKEY =  "SKc422e0dbaa1834429d4eb9bcc8813409",//"SK5ea58ce34ab1738fb9b7c65a7a1dd6cf",
+        SIGNINGKEY_SECRET = "iMrzzZI1xq9zGtrXhE1wyDbkOHp6z3g1", //"5jVN1gCsuytcovb5TWEFdijyjpgZXI99",
+        SERVICE_SID = "IS4af66e850fa941598eb3974b64825eea", //"IS2fb4663fd5214b82ad7c77fa31d992d5",
+        CRMURL = 'http://u360service.azurewebsites.net/CRMService.svc'; //'http://sandbox.centralus.cloudapp.azure.com/CRMService/CRMService.svc';
 
     var wsConnection = {};
     var client = new twilio.TaskRouterClient(ACCOUNT_SID, AUTH_TOKEN, WORKSPACE_ID);
@@ -85,7 +85,20 @@ module.exports = function(app, wsServer) {
                 SubType: setSubType(queryType.toUpperCase())
             }
             console.log("inbound data...", inboundSMSData);
-            
+            //****Comment this if CRM is working ****
+            // var taskDetail = {
+            //     subType: inboundSMSData.SubType,
+            //     messageBody: inboundSMSData.Description,
+            //     phoneNumber: inboundSMSData.PhoneNumber,
+            //     caseUrl: 'https://google.com',
+            //     caseId: '121'
+            // }
+            // createTask(taskDetail);
+            // res.status(200).send({
+            //     "successFlag": true
+            // })
+            // //****Comment the above block if CRM is working ****
+
             request.post(url, {json: {request: inboundSMSData }}, function(error, response, body) {
                 console.log("eror........", error);
                 console.log("body..........", body);
@@ -117,7 +130,7 @@ module.exports = function(app, wsServer) {
                     })
                 }
 
-        });
+            });
 
     }
     });
@@ -225,9 +238,11 @@ module.exports = function(app, wsServer) {
         }
     }
 
-    app.get('/agent_answer_status_callback', function(req, res) {
+    app.post('/agent_answer_status_callback', function(req, res) {
         console.log("req....", req.body);
-
+        res.status(200).send({
+            successFlag: false
+        });
     });
 
     function smsDetailValidation(crmObject) {
