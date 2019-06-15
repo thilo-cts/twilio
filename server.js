@@ -11,7 +11,7 @@ var express = require('express');
 var app = new express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var WebSocketServer = require('websocket').server;
+//var WebSocketServer = require('websocket').server;
 
 // ## SimpleServer `SimpleServer(obj)`
 //
@@ -35,12 +35,13 @@ http_server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", functi
   var addr = http_server.address();
   console.log("Chat server listening at", addr.address + ":" + addr.port);
 });
-var wsServer = new WebSocketServer({
-    httpServer: http_server
-});
+
+// var wsServer = new WebSocketServer({
+//     httpServer: http_server
+// });
 
 
- require('./server/router/router')(app, wsServer); 
+ require('./server/router/router')(app); 
  
 
 

@@ -4,7 +4,7 @@ var twilio = require("twilio"),
     request = require('request');
 
 
-module.exports = function(app, wsServer) {
+module.exports = function(app) {
     var reservationSid = "",
         ACCOUNT_SID = "ACb4a42bfae704336c8b6a4dcc0da538d8",//"AC7b39bfd4c70d4ec566d865889e03488a",
         AUTH_TOKEN = "6b4f8c172fe6d1d7ec6525bc9667190a", //"d09d8a2f47b8af903e29fecd2337174b",
@@ -445,24 +445,25 @@ module.exports = function(app, wsServer) {
         }
     }
 
-    wsServer.on('request', function(request) {
-        console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
-        var connection = wsConnection = request.accept(null, request.origin);
-        connection.on('message', function(message) {
-            console.log("message..............", message);
-            connection.sendUTF(JSON.stringify({
-                type: 'color',
-                data: "hellowooow"
-            }));
-            if (message.type === 'utf8') {
-                // process WebSocket message
-            }
-        });
+    //Commenting the below as we no longer required web-socket 
+    // wsServer.on('request', function(request) {
+    //     console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
+    //     var connection = wsConnection = request.accept(null, request.origin);
+    //     connection.on('message', function(message) {
+    //         console.log("message..............", message);
+    //         connection.sendUTF(JSON.stringify({
+    //             type: 'color',
+    //             data: "hellowooow"
+    //         }));
+    //         if (message.type === 'utf8') {
+    //             // process WebSocket message
+    //         }
+    //     });
 
-        connection.on('close', function(connection) {
-            console.log("connection.....clos.........", connection);
-            // close user connection
-        });
-    });
+    //     connection.on('close', function(connection) {
+    //         console.log("connection.....clos.........", connection);
+    //         // close user connection
+    //     });
+    // });
 
 }

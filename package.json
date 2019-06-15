@@ -5,16 +5,14 @@
   "author": "Mostafa Eweda <mo.eweda@gmail.com>",
   "main": "server.js",
   "dependencies": {
-    "express": "^4.14.0",
-    "async": "latest",
-    "twilio": "latest"
+    "express": "4.14.0",
+    "async": "0.2.10",
+    "twilio": "2.11.0"
   },
   "devDependencies": {
-    "body-parser": "^1.15.2",
-    "cors": "^2.8.1",
-    "lodash": "^4.17.1",
-    "request": "^2.79.0",
-    "socket.io": "^1.7.1",
-    "socket.io-client": "^1.7.1"
+    "body-parser": "1.15.2",
+    "cors": "2.8.1",
+    "lodash": "4.17.1",
+    "request": "2.79.0"
   }
 }
